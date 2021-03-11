@@ -41,7 +41,7 @@ const onBoardings = [
   },
 ];
 
-const OnboardingScreen = () => {
+const OnboardingScreen = ({ navigation }) => {
   const [completed, setCompleted] = useState(false);
   const scrollX = new Animated.Value(0);
 
@@ -136,7 +136,7 @@ const OnboardingScreen = () => {
 
           const dotSize = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
-            outputRange: [SIZES.base, 17, SIZES.base],
+            outputRange: [SIZES.base, 20, SIZES.base],
             extrapolate: "clamp",
           });
 
@@ -157,24 +157,24 @@ const OnboardingScreen = () => {
       <View>{renderContent()}</View>
       <View style={styles.dotRootContainer}>{renderDots()}</View>
       <TouchableOpacity
-              style={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                width: 150,
-                height: 60,
-                paddingLeft: 20,
-                justifyContent: "center",
-                borderTopLeftRadius: 30,
-                borderBottomLeftRadius: 30,
-                backgroundColor: COLORS.blue,
-              }}
-              onPress={() => console.log("pressed")}
-            >
-              <Text style={{ ...FONTS.h2, color: COLORS.white }}>
-                {completed ? "Let's Go" : "Skip"}
-              </Text>
-            </TouchableOpacity>
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: 150,
+          height: 60,
+          paddingLeft: 20,
+          justifyContent: "center",
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
+          backgroundColor: COLORS.blue,
+        }}
+        onPress={() => navigation.navigate("Auth")}
+      >
+        <Text style={{ ...FONTS.h2, color: COLORS.white }}>
+          {completed ? "Let's Go" : "Skip"}
+        </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

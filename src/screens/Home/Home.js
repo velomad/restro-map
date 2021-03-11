@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import MapView, { Polygon, Marker, Callout } from "react-native-maps";
+import { COLORS, FONTS, SIZES } from "../../constants";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const map = useRef();
   const carousel = useRef(null);
 
@@ -95,30 +96,36 @@ const Home = () => {
     <View style={styles.cardContainer}>
       <Image source={item.image} style={styles.cardImage} />
       <Text style={styles.hotelName}>{item.name}</Text>
-      <View style={styles.roomInfo}>
-        {item.rooms.map((el, index) => (
-          <Text
-            key={index}
-            style={{
-              color: "#555",
-              padding: 2,
-            }}
-          >
-            {el.type}
-          </Text>
-        ))}
-      </View>
+      {item.rooms.map((el, index) => (
+        <View style={styles.roomInfo} key={index}>
+          <View style={{ flexDirection: "column" }}>
+            <Text
+              key={index}
+              style={{
+                color: COLORS.gray,
+              }}
+            >
+              {el.type}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "column", paddingVertical: 2 }}>
+            <Text
+              style={{
+                color: COLORS.gray,
+              }}
+            >
+              &#x20B9; {el.cost}
+            </Text>
+          </View>
+        </View>
+      ))}
 
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          padding: 20,
-          justifyContent: "space-between",
-        }}
-      >
-        <Button title="View" />
-        <Button title="Book" />
+      <View>
+        <Button
+          title="Book Room"
+          color="gray"
+          onPress={() => navigation.navigate("Booking")}
+        />
       </View>
     </View>
   );
@@ -196,11 +203,15 @@ const styles = StyleSheet.create({
   },
   hotelName: {
     fontSize: 20,
-    padding: 5,
-    color: "#222",
-    textTransform: "uppercase",
+    fontWeight: "700",
+    color: COLORS.gray,
+    textTransform: "capitalize",
+    padding: 8,
   },
   roomInfo: {
-    paddingLeft: 10,
+    paddingLeft: 8,
+    paddingRight: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
