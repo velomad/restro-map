@@ -10,8 +10,6 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import Onboarding from "react-native-onboarding-swiper";
-import { color } from "react-native-reanimated";
 
 // Constants
 import { images, theme } from "../../constants";
