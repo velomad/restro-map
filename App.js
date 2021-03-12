@@ -13,6 +13,8 @@ import AppNavigator from "./src/navigator/AppNavigator";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Provider } from "react-redux";
+import Store from "./src/store";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -43,7 +45,11 @@ export default function App() {
   }, []);
 
   if (fontsLoaded) {
-    return <AppNavigator isFirstLaunch={isFirstLaunch}/>;
+    return (
+      <Provider store={Store}>
+        <AppNavigator isFirstLaunch={isFirstLaunch} />
+      </Provider>
+    );
   } else {
     return (
       <AppLoading

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ToastAndroid } from "react-native";
 import { InputField, Button } from "../../components";
 import { COLORS, FONTS } from "../../constants";
+import { connect } from "react-redux";
+import { signIn } from "../../store/action";
 
-const Login = ({ navigation }) => {
-  const [inputValue, setInputValue] = useState({ username: "" });
+const Login = (props) => {
+  const [inputValue, setInputValue] = useState({});
   const { username, password } = inputValue;
 
   const handleChange = (e) => {
@@ -13,6 +15,25 @@ const Login = ({ navigation }) => {
       ...prev,
       [name]: text,
     }));
+  };
+
+  const handleLogin = async () => {
+    await props.signIn(inputValue);
+    if (props.signinError.status === 401) {
+      showToastWithGravityAndOffset();
+      return;
+    }
+    props.navigation.navigate("Home");
+  };
+
+  const showToastWithGravityAndOffset = () => {
+    ToastAndroid.showWithGravityAndOffset(
+      "A wild toast appeared!",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    );
   };
 
   return (
@@ -41,7 +62,7 @@ const Login = ({ navigation }) => {
         </View>
 
         <Text
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => props.navigation.navigate("Home")}
           style={{
             color: COLORS.gray,
             padding: 10,
@@ -73,14 +94,14 @@ const Login = ({ navigation }) => {
           onChange={handleChange}
         />
 
-        <Button title="Login" onPress={() => navigation.navigate("Home")} />
+        <Button title="Login" onPress={handleLogin} />
       </View>
       <View style={{ alignItems: "center" }}>
         <Text>
           I am new user,
           <Text
             style={{ color: COLORS.blue }}
-            onPress={() => navigation.navigate("Signup")}
+            onPress={() => props.navigation.navigate("Signup")}
           >
             {" "}
             Sign Up{" "}
@@ -91,7 +112,13 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+const mapStateToProps = ({ authState }) => ({
+  signinIsLoading: authState.signinLoading,
+  signinError: authState.error,
+  token: authState.token,
+});
+
+export default connect(mapStateToProps, { signIn })(Login);
 
 const styles = StyleSheet.create({
   container: {
